@@ -1,0 +1,99 @@
+{
+  "customers": [
+    {
+      "id": "C001",
+      "name": "Ravi Kumar",
+      "age": 34,
+      "location": "Mumbai",
+      "risk_profile": "Low"
+    },
+    {
+      "id": "C002",
+      "name": "Priya Sharma",
+      "age": 45,
+      "location": "Delhi",
+      "risk_profile": "Medium"
+    },
+    {
+      "id": "C003",
+      "name": "Anil Desai",
+      "age": 55,
+      "location": "Bengaluru",
+      "risk_profile": "High"
+    }
+  ],
+  "policies": [
+    {
+      "policy_id": "M001",
+      "category": "Motor",
+      "insurer_name": "New India Assurance",
+      "policy_name": "Comprehensive Motor Cover",
+      "premium": 15000,
+      "coverage_amount": 500000,
+      "exclusions": ["Wear and Tear", "Driving under influence"],
+      "add_ons": ["Zero Depreciation", "Engine Protect"],
+      "claim_settlement_ratio": 94.5,
+      "tenure": 1
+    },
+    {
+      "policy_id": "M002",
+      "category": "Motor",
+      "insurer_name": "New India Assurance",
+      "policy_name": "Third Party Basic",
+      "premium": 5000,
+      "coverage_amount": 750000,
+      "exclusions": ["Own Damage"],
+      "add_ons": ["PA Cover"],
+      "claim_settlement_ratio": 94.5,
+      "tenure": 1
+    },
+    {
+      "policy_id": "M003",
+      "category": "Motor",
+      "insurer_name": "Competitor Auto",
+      "policy_name": "Premium Auto Shield",
+      "premium": 18000,
+      "coverage_amount": 600000,
+      "exclusions": ["Electrical failure not due to accident"],
+      "add_ons": ["Zero Depreciation", "Consumables Cover", "Return to Invoice"],
+      "claim_settlement_ratio": 92.1,
+      "tenure": 1
+    },
+    {
+      "policy_id": "H001",
+      "category": "Health",
+      "insurer_name": "New India Assurance",
+      "policy_name": "Asha Kiran Policy",
+      "premium": 12000,
+      "coverage_amount": 1000000,
+      "exclusions": ["Pre-existing diseases (first 2 years)"],
+      "add_ons": ["Maternity Cover", "Room Rent Waiver"],
+      "claim_settlement_ratio": 96.2,
+      "tenure": 1
+    },
+    {
+      "policy_id": "H002",
+      "category": "Health",
+      "insurer_name": "New India Assurance",
+      "policy_name": "Senior Citizen Mediclaim",
+      "premium": 25000,
+      "coverage_amount": 500000,
+      "exclusions": ["Dental treatment", "Cosmetic surgery"],
+      "add_ons": ["Ayush Treatment", "Home Care"],
+      "claim_settlement_ratio": 96.2,
+      "tenure": 1
+    },
+    {
+      "policy_id": "H003",
+      "category": "Health",
+      "insurer_name": "Competitor Health",
+      "policy_name": "Total Health Plus",
+      "premium": 14000,
+      "coverage_amount": 800000,
+      "exclusions": ["Pre-existing diseases (first 3 years)", "Alternative medicine"],
+      "add_ons": ["No Claim Bonus Shield"],
+      "claim_settlement_ratio": 89.5,
+      "tenure": 1
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "policymatch-ai",
+  "version": "1.0.0",
+  "description": "New India Assurance AI-Assisted Policy Comparison Tool",
+  "scripts": {
+    "postinstall": "cd backend && npm.cmd install && cd ../frontend && npm.cmd install",
+    "start": "concurrently \"npm.cmd run start:backend\" \"npm.cmd run start:frontend\"",
+    "start:backend": "cd backend && npm.cmd start",
+    "start:frontend": "cd frontend && npm.cmd run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
