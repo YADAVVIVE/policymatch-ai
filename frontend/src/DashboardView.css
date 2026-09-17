@@ -1,46 +1,60 @@
 /* Dashboard View Styles */
 
 .dashboard-view {
-  margin-top: 1rem;
+  margin-top: 16px;
 }
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 24px;
 }
 
 .dashboard-header h2 {
-  font-size: 1.75rem;
-  color: var(--text);
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 16px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.btn-back {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.btn-back:hover {
+  color: var(--text-primary);
 }
 
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .kpi-card {
-  background: white;
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
+  border-radius: var(--radius-sm);
+  padding: 16px;
   display: flex;
   align-items: center;
-  gap: 1.5rem;
-  box-shadow: var(--shadow-sm);
+  gap: 16px;
+  box-shadow: none; /* Removed shadow */
 }
 
 .kpi-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,40 +66,40 @@
 }
 
 .kpi-label {
-  font-size: 0.875rem;
-  color: var(--text-light);
+  font-size: 12px;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
+  font-weight: 500;
+  margin-bottom: 4px;
 }
 
 .kpi-value {
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--text);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .charts-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  gap: 1.5rem;
+  gap: 16px;
 }
 
 .chart-card {
-  background: white;
+  background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  box-shadow: none; /* Removed shadow */
 }
 
 .chart-card h3 {
-  font-size: 1.125rem;
-  color: var(--secondary);
-  margin-bottom: 1.5rem;
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 16px;
   border-bottom: 1px solid var(--border);
-  padding-bottom: 0.75rem;
+  padding-bottom: 8px;
 }
 
 .chart-container {
@@ -97,6 +111,7 @@
 }
 
 .empty-chart {
-  color: var(--text-light);
+  color: var(--text-secondary);
+  font-size: 13px;
   font-style: italic;
 }

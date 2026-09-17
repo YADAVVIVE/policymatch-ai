@@ -1,78 +1,43 @@
-/* Compare View Styles appended to existing styles */
+/* Compare View Styles */
 
 .compare-view {
-  margin-top: 1rem;
-}
-
-.btn-back {
-  display: flex;
-  align-items: center;
-  background: none;
-  border: none;
-  color: var(--text-light);
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  margin-bottom: 2rem;
-  padding: 0;
-}
-
-.btn-back:hover {
-  color: var(--primary);
+  margin-top: 16px;
 }
 
 .ai-summary-card {
-  background: linear-gradient(to bottom right, #ffffff, #f0f9ff);
-  border: 1px solid #bae6fd;
-  border-radius: var(--radius);
-  padding: 2rem;
-  margin-bottom: 3rem;
-  box-shadow: var(--shadow-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 24px;
+  margin-bottom: 32px;
+  box-shadow: none;
 }
 
 .ai-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .ai-title {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .ai-title h2 {
-  font-size: 1.5rem;
-  color: #0369a1;
+  font-size: 16px;
+  color: var(--primary);
   margin: 0;
-}
-
-.status-badge {
-  display: flex;
-  align-items: center;
-  background-color: #fef08a;
-  color: #854d0e;
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 700;
-  border: 1px solid #fde047;
-}
-
-.status-badge.pending_review {
-  background-color: #ffedd5;
-  color: #c2410c;
-  border-color: #fed7aa;
 }
 
 .ai-content {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 2rem;
+  gap: 24px;
 }
 
 @media (max-width: 768px) {
@@ -82,23 +47,23 @@
 }
 
 .rationale-section h3 {
-  font-size: 1rem;
-  color: var(--text-light);
-  margin-bottom: 0.5rem;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .rationale-section p {
-  font-size: 1.125rem;
-  color: var(--text);
-  line-height: 1.6;
+  font-size: 14px;
+  color: var(--text-primary);
+  line-height: 1.5;
 }
 
 .confidence-section {
-  background-color: white;
-  padding: 1.5rem;
-  border-radius: 12px;
+  background-color: var(--surface);
+  padding: 16px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
@@ -108,31 +73,31 @@
 .confidence-label {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
-  font-weight: 600;
-  color: var(--secondary);
+  margin-bottom: 12px;
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--text-primary);
 }
 
 .progress-bar-bg {
-  height: 12px;
-  background-color: #e2e8f0;
-  border-radius: 9999px;
+  height: 8px;
+  background-color: var(--border);
+  border-radius: var(--radius-sm);
   overflow: hidden;
 }
 
 .progress-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #38bdf8, #0284c7);
-  border-radius: 9999px;
+  background-color: var(--primary);
+  border-radius: var(--radius-sm);
   transition: width 1s ease-out;
 }
 
 /* Table Styles */
 .comparison-table-wrapper {
   overflow-x: auto;
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
+  background: var(--surface);
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
 }
 
@@ -144,81 +109,77 @@
 
 .comparison-table th, 
 .comparison-table td {
-  padding: 1.5rem;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--border);
-  border-right: 1px solid var(--border);
   vertical-align: top;
-}
-
-.comparison-table th:last-child,
-.comparison-table td:last-child {
-  border-right: none;
+  font-size: 13px;
+  color: var(--text-primary);
 }
 
 .comparison-table th {
-  background-color: #f8fafc;
+  background-color: var(--secondary);
   width: 25%;
 }
 
 .comparison-table th:first-child {
   width: 15%;
   text-align: left;
-  background-color: white;
+  background-color: var(--surface);
 }
 
 .comparison-table td:first-child {
   text-align: left;
-  font-weight: 600;
-  color: var(--secondary);
-  background-color: #f8fafc;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background-color: var(--secondary);
 }
 
 .recommended-col {
-  background-color: #f0fdf4 !important;
-  border-left: 2px solid #22c55e !important;
-  border-right: 2px solid #22c55e !important;
+  background-color: var(--success-bg) !important;
+  border-left: 1px solid var(--border) !important;
+  border-right: 1px solid var(--border) !important;
 }
 
 th.recommended-col {
-  border-top: 2px solid #22c55e !important;
+  border-top: 2px solid var(--success-text) !important;
   position: relative;
 }
 
 .rec-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  background-color: #22c55e;
+  gap: 4px;
+  background-color: var(--success-text);
   color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
   text-transform: uppercase;
-  margin-bottom: 0.75rem;
+  margin-bottom: 8px;
 }
 
 .th-policy-name {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 0.25rem;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
 }
 
 .th-insurer {
-  font-size: 0.875rem;
-  color: var(--text-light);
+  font-size: 12px;
+  color: var(--text-secondary);
 }
 
 .feature-list {
   text-align: left;
-  padding-left: 1.25rem;
-  font-size: 0.875rem;
-  color: var(--secondary);
+  padding-left: 16px;
+  font-size: 13px;
+  color: var(--text-primary);
 }
 
 .feature-list li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
 }
 
 .animate-fade-in {
@@ -228,41 +189,4 @@ th.recommended-col {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
-}
-
-.compare-action-bar {
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  padding: 1rem 2rem;
-  border-radius: 9999px;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  z-index: 50;
-}
-
-.compare-action-bar span {
-  font-weight: 600;
-  color: var(--text);
-}
-
-.compare-action-bar .btn {
-  width: auto;
-  padding: 0.75rem 2rem;
-  border-radius: 9999px;
-}
-
-.compare-action-bar .btn:disabled {
-  background-color: #cbd5e1;
-  cursor: not-allowed;
-}
-
-.card.selected {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px var(--primary);
 }

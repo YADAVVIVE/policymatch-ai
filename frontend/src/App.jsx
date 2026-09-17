@@ -93,17 +93,35 @@ function App() {
   }
 
   return (
-    <div className="container">
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
-        <div style={{ textAlign: 'left', cursor: 'pointer' }} onClick={() => { setShowLanding(true); setCompareData(null); setShowAuditLog(false); setShowDashboard(false); }}>
-          <h1 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Shield size={28} style={{ color: 'var(--primary)' }} />
-            PolicyMatch AI — New India Assurance
-          </h1>
+    <div className="app-layout">
+      <aside className="app-sidebar">
+        <div className="sidebar-header" onClick={() => { setShowLanding(true); setCompareData(null); setShowAuditLog(false); setShowDashboard(false); }} style={{cursor: 'pointer'}}>
+          <Shield size={24} style={{ color: 'var(--primary)' }} />
+          <h1>PolicyMatch AI</h1>
         </div>
-        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-          <div className="role-toggle" style={{ marginRight: '1rem', fontSize: '0.875rem' }}>
-            <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontWeight: 600 }}>
+        <nav className="sidebar-nav">
+          <button className={`nav-item ${!showLanding && !showDashboard && !showAuditLog && !compareData ? 'active' : ''}`} onClick={() => { setShowLanding(false); setCompareData(null); setShowAuditLog(false); setShowDashboard(false); }}>
+            <Home size={18} />
+            <span>New Comparison</span>
+          </button>
+          <button className={`nav-item ${showDashboard ? 'active' : ''}`} onClick={() => { setShowDashboard(true); setShowAuditLog(false); setShowLanding(false); setCompareData(null); }}>
+            <BarChart2 size={18} />
+            <span>Dashboard</span>
+          </button>
+          <button className={`nav-item ${showAuditLog ? 'active' : ''}`} onClick={() => { setShowAuditLog(true); setShowDashboard(false); setShowLanding(false); setCompareData(null); }}>
+            <FileText size={18} />
+            <span>Audit Trail</span>
+          </button>
+        </nav>
+      </aside>
+
+      <main className="app-main">
+        <header className="app-topbar">
+          <div className="breadcrumb">
+            {showLanding ? 'Welcome' : showDashboard ? 'Dashboard' : showAuditLog ? 'Audit Trail' : compareData ? 'Comparison Results' : 'Select Policies'}
+          </div>
+          <div className="topbar-actions">
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 500 }}>
               <input 
                 type="checkbox" 
                 checked={role === 'Senior Underwriter'} 
@@ -111,124 +129,120 @@ function App() {
               />
               Senior Mode ({role})
             </label>
+            <div className="user-avatar" title={role}>
+              {role === 'Senior Underwriter' ? 'SU' : 'UW'}
+            </div>
           </div>
-          <button className="tab" onClick={() => { setShowDashboard(true); setShowAuditLog(false); setShowLanding(false); }}>
-            <BarChart2 size={16} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'text-bottom' }} />
-            Dashboard
-          </button>
-          <button className="tab" onClick={() => { setShowAuditLog(true); setShowDashboard(false); setShowLanding(false); }}>
-            <FileText size={16} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'text-bottom' }} />
-            Audit Trail
-          </button>
-        </div>
-      </header>
+        </header>
 
-      {showLanding ? (
-        <LandingView onStart={() => setShowLanding(false)} />
-      ) : showDashboard ? (
-        <DashboardView onBack={() => setShowDashboard(false)} />
-      ) : showAuditLog ? (
-        <AuditLogView onBack={() => setShowAuditLog(false)} />
-      ) : compareData ? (
-        <CompareView 
-          data={compareData} 
-          role={role}
-          onBack={() => setCompareData(null)} 
-        />
-      ) : (
-        <>
-          <div className="tabs">
-            {['All', 'Motor', 'Health'].map(tab => (
-              <button 
-                key={tab}
-                className={`tab ${activeTab === tab ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab)}
-              >
-                {tab === 'Motor' && <Car size={16} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'text-bottom' }}/>}
-                {tab === 'Health' && <HeartPulse size={16} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'text-bottom' }}/>}
-                {tab}
-              </button>
-            ))}
-          </div>
+        <div className="content-area">
+          {showLanding ? (
+            <LandingView onStart={() => setShowLanding(false)} />
+          ) : showDashboard ? (
+            <DashboardView onBack={() => {setShowDashboard(false); setShowLanding(false);}} />
+          ) : showAuditLog ? (
+            <AuditLogView onBack={() => {setShowAuditLog(false); setShowLanding(false);}} />
+          ) : compareData ? (
+            <CompareView 
+              data={compareData} 
+              role={role}
+              onBack={() => setCompareData(null)} 
+            />
+          ) : (
+            <>
+              <div className="tabs">
+                {['All', 'Motor', 'Health'].map(tab => (
+                  <button 
+                    key={tab}
+                    className={`tab ${activeTab === tab ? 'active' : ''}`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab === 'Motor' && <Car size={16} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'text-bottom' }}/>}
+                    {tab === 'Health' && <HeartPulse size={16} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'text-bottom' }}/>}
+                    {tab}
+                  </button>
+                ))}
+              </div>
 
-          <div className="grid">
-            {filteredPolicies.map((policy) => {
-              const isSelected = selectedPolicies.has(policy.policy_id);
-              return (
-                <div 
-                  className={`card ${isSelected ? 'selected' : ''}`} 
-                  key={policy.policy_id}
-                  onClick={() => toggleSelection(policy.policy_id)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <div className="card-header">
-                    <div>
-                      <h3>
-                        {isSelected ? (
-                          <CheckSquare size={18} style={{ color: 'var(--primary)', marginRight: '6px', verticalAlign: 'text-bottom' }}/>
-                        ) : (
-                          <Square size={18} style={{ color: 'var(--text-light)', marginRight: '6px', verticalAlign: 'text-bottom' }}/>
-                        )}
-                        {policy.policy_name}
-                      </h3>
-                      <h4 style={{ paddingLeft: '24px' }}>{policy.insurer_name}</h4>
-                    </div>
-                    <span className={`badge ${policy.category.toLowerCase()}`}>
-                      {policy.category}
-                    </span>
-                  </div>
-                  
-                  <div className="card-body">
-                    <div className="stat">
-                      <span className="stat-label">Annual Premium</span>
-                      <span className="stat-value" style={{ color: 'var(--primary)' }}>
-                        {formatCurrency(policy.premium)}
-                      </span>
-                    </div>
-                    <div className="stat">
-                      <span className="stat-label">Coverage Amount</span>
-                      <span className="stat-value">{formatCurrency(policy.coverage_amount)}</span>
-                    </div>
-                    <div className="stat">
-                      <span className="stat-label">Settlement Ratio</span>
-                      <span className="stat-value">{policy.claim_settlement_ratio}%</span>
-                    </div>
-                    <div className="stat">
-                      <span className="stat-label">Tenure</span>
-                      <span className="stat-value">{policy.tenure} Year(s)</span>
-                    </div>
-
-                    <div className="list-section">
-                      <h5>Key Add-ons</h5>
-                      <div className="tag-list">
-                        {policy.add_ons.map((addon, idx) => (
-                          <span key={idx} className="tag">
-                            <Check size={12} style={{ color: '#16a34a', marginRight: '4px', verticalAlign: 'middle' }} />
-                            {addon}
+              <div className="policy-grid">
+                {filteredPolicies.map((policy) => {
+                  const isSelected = selectedPolicies.has(policy.policy_id);
+                  return (
+                    <div 
+                      className={`card ${isSelected ? 'selected' : ''}`} 
+                      key={policy.policy_id}
+                      onClick={() => toggleSelection(policy.policy_id)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="card-header">
+                        <div>
+                          <h3>
+                            {isSelected ? (
+                              <CheckSquare size={16} style={{ color: 'var(--primary)', marginRight: '6px' }}/>
+                            ) : (
+                              <Square size={16} style={{ color: 'var(--text-secondary)', marginRight: '6px' }}/>
+                            )}
+                            {policy.policy_name}
+                          </h3>
+                          <h4 style={{ paddingLeft: '22px' }}>{policy.insurer_name}</h4>
+                        </div>
+                        <span className={`badge ${policy.category.toLowerCase()}`}>
+                          {policy.category}
+                        </span>
+                      </div>
+                      
+                      <div className="card-body">
+                        <div className="stat">
+                          <span className="stat-label">Annual Premium</span>
+                          <span className="stat-value highlight">
+                            {formatCurrency(policy.premium)}
                           </span>
-                        ))}
+                        </div>
+                        <div className="stat">
+                          <span className="stat-label">Coverage Amount</span>
+                          <span className="stat-value">{formatCurrency(policy.coverage_amount)}</span>
+                        </div>
+                        <div className="stat">
+                          <span className="stat-label">Settlement Ratio</span>
+                          <span className="stat-value">{policy.claim_settlement_ratio}%</span>
+                        </div>
+                        <div className="stat">
+                          <span className="stat-label">Tenure</span>
+                          <span className="stat-value">{policy.tenure} Year(s)</span>
+                        </div>
+
+                        <div className="list-section">
+                          <h5>Key Add-ons</h5>
+                          <div className="tag-list">
+                            {policy.add_ons.map((addon, idx) => (
+                              <span key={idx} className="tag">
+                                {addon}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                  );
+                })}
+              </div>
 
-          {selectedPolicies.size > 0 && (
-            <div className="compare-action-bar animate-fade-in">
-              <span>{selectedPolicies.size} policy selected (Select 2-4)</span>
-              <button 
-                className="btn" 
-                onClick={handleCompareSubmit}
-                disabled={selectedPolicies.size < 2 || isComparing}
-              >
-                {isComparing ? 'Analyzing...' : 'Compare AI Match'}
-              </button>
-            </div>
+              {selectedPolicies.size > 0 && (
+                <div className="compare-action-bar animate-fade-in">
+                  <span style={{fontSize: '14px', fontWeight: 500}}>{selectedPolicies.size} policy selected (Select 2-4)</span>
+                  <button 
+                    className="btn btn-primary" 
+                    onClick={handleCompareSubmit}
+                    disabled={selectedPolicies.size < 2 || isComparing}
+                  >
+                    {isComparing ? 'Analyzing...' : 'Compare Selected'}
+                  </button>
+                </div>
+              )}
+            </>
           )}
-        </>
-      )}
+        </div>
+      </main>
     </div>
   );
 }
