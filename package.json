@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "New India Assurance AI-Assisted Policy Comparison Tool",
   "scripts": {
-    "postinstall": "cd frontend && npm.cmd install",
-    "start": "npm.cmd run start:frontend",
-    "start:frontend": "cd frontend && npm.cmd run dev"
+    "postinstall": "cd frontend && npm install",
+    "start": "npm run start:frontend",
+    "start:frontend": "cd frontend && npm run dev"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
