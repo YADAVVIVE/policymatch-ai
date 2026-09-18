@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { AlertTriangle, Info } from 'lucide-react';
+import { ShieldCheck, AlertTriangle, MessageSquare, ChevronRight } from 'lucide-react';
+import { updateComparisonDecision } from './lib/comparisonsStore';
 
 export default function ReviewPanel({ data, role, onDecisionComplete }) {
   const [reviewerName, setReviewerName] = useState('');
@@ -25,21 +26,18 @@ export default function ReviewPanel({ data, role, onDecisionComplete }) {
 
     setIsSubmitting(true);
     try {
-      const res = await fetch(`/api/comparisons/${data.id}/decision`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          reviewer_name: reviewerName,
-          decision,
-          override_policy_id: overridePolicyId,
-          comment
-        })
-      });
+      const decisionData = {
+        reviewer_name: role,
+        decision,
+        override_policy_id: overridePolicyId,
+        comment
+      };
+      
+      const updatedRecord = updateComparisonDecision(data.id, decisionData);
+      
+      if (!updatedRecord) throw new Error("Could not update decision locally.");
 
-      const responseData = await res.json();
-      if (!res.ok) throw new Error(responseData.error || 'Failed to submit review');
-
-      onDecisionComplete(responseData.comparison);
+      onDecisionComplete(updatedRecord);
     } catch (err) {
       setError(err.message);
     } finally {

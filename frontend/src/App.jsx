@@ -4,6 +4,7 @@ import CompareView from './CompareView';
 import AuditLogView from './AuditLogView';
 import DashboardView from './DashboardView';
 import LandingView from './LandingView';
+import { saveComparison, clearAllComparisons } from './lib/comparisonsStore';
 
 function App() {
   const [policies, setPolicies] = useState([]);
@@ -88,6 +89,7 @@ function App() {
       });
       if (!response.ok) throw new Error("Comparison failed");
       const data = await response.json();
+      saveComparison(data);
       setCompareData(data);
     } catch (err) {
       console.error("Comparison Error:", err);
@@ -140,6 +142,13 @@ function App() {
             {showLanding ? 'Welcome' : showDashboard ? 'Dashboard' : showAuditLog ? 'Audit Trail' : compareData ? 'Comparison Results' : 'Select Policies'}
           </div>
           <div className="topbar-actions">
+            <button 
+              className="btn btn-text" 
+              style={{ fontSize: '12px', padding: '4px 8px', marginRight: '12px' }} 
+              onClick={() => { if(window.confirm('Reset all demo data?')) { clearAllComparisons(); window.location.reload(); } }}
+            >
+              Reset Demo Data
+            </button>
             <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: 500 }}>
               <input 
                 type="checkbox" 

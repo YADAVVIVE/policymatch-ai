@@ -4,6 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
+import { getAllComparisons } from './lib/comparisonsStore';
 
 export default function DashboardView({ onBack }) {
   const [data, setData] = useState(null);
@@ -11,23 +12,49 @@ export default function DashboardView({ onBack }) {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const abortController = new AbortController();
-    const fetchAnalytics = async () => {
-      try {
-        const response = await fetch('/api/analytics/summary', { signal: abortController.signal });
-        if (!response.ok) throw new Error("Failed to load analytics");
-        const summary = await response.json();
-        setData(summary);
-      } catch (err) {
-        if (err.name === 'AbortError') return;
-        console.error("Failed to fetch analytics:", err);
-        setError(err.message || "Failed to load dashboard data");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchAnalytics();
-    return () => abortController.abort();
+    try {
+      const comparisons = getAllComparisons();
+      const total = comparisons.length;
+      
+      let totalTurnaroundTime = 0;
+      let reviewedCount = 0;
+      const decisionSplit = { approved: 0, overridden: 0, escalated: 0, pending_review: 0 };
+      const dailyCounts = {};
+
+      comparisons.forEach(c => {
+        decisionSplit[c.status] = (decisionSplit[c.status] || 0) + 1;
+
+        if (c.audit && c.ai_timestamp && c.audit.timestamp) {
+          const aiTime = new Date(c.ai_timestamp).getTime();
+          const humanTime = new Date(c.audit.timestamp).getTime();
+          totalTurnaroundTime += (humanTime - aiTime);
+          reviewedCount++;
+        }
+
+        const dateStr = new Date(c.ai_timestamp).toISOString().split('T')[0];
+        dailyCounts[dateStr] = (dailyCounts[dateStr] || 0) + 1;
+      });
+
+      const avgTurnaroundSecs = reviewedCount > 0 
+        ? Math.round((totalTurnaroundTime / reviewedCount) / 1000) 
+        : 0;
+
+      const timeSeries = Object.keys(dailyCounts).sort().map(date => ({
+        date,
+        comparisons: dailyCounts[date]
+      }));
+
+      setData({
+        total,
+        avg_turnaround_seconds: avgTurnaroundSecs,
+        decision_split: decisionSplit,
+        time_series: timeSeries
+      });
+    } catch (err) {
+      setError("Failed to load dashboard data from storage");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   if (loading) {

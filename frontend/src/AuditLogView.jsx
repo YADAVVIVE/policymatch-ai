@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Clock, UserCheck, ShieldAlert, CheckCircle, XCircle } from 'lucide-react';
+import './AuditLogView.css';
+import { getAllComparisons } from './lib/comparisonsStore';
 
 export default function AuditLogView({ onBack }) {
   const [logs, setLogs] = useState([]);
@@ -8,23 +10,15 @@ export default function AuditLogView({ onBack }) {
   const [filter, setFilter] = useState('all');
 
   useEffect(() => {
-    const abortController = new AbortController();
-    const fetchLogs = async () => {
-      try {
-        const response = await fetch('/api/audit-log', { signal: abortController.signal });
-        if (!response.ok) throw new Error("Failed to load audit logs");
-        const data = await response.json();
-        setLogs(Array.isArray(data) ? data : []);
-      } catch (err) {
-        if (err.name === 'AbortError') return;
-        console.error("Failed to fetch audit log:", err);
-        setError(err.message || "Failed to load audit trail");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchLogs();
-    return () => abortController.abort();
+    try {
+      const data = getAllComparisons();
+      const sortedLog = [...data].sort((a, b) => new Date(b.ai_timestamp) - new Date(a.ai_timestamp));
+      setLogs(sortedLog);
+    } catch (err) {
+      setError("Failed to load audit logs from storage");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   const filteredLogs = filter === 'all' 
