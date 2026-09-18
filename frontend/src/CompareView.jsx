@@ -9,7 +9,17 @@ export default function CompareView({ data: initialData, role, onBack }) {
     setData(initialData);
   }, [initialData]);
 
-  if (!data) return null;
+  if (!data || !data.comparison || !Array.isArray(data.comparison) || data.comparison.length === 0) {
+    return (
+      <div className="compare-view animate-fade-in" style={{ textAlign: 'center', padding: '2rem' }}>
+        <button className="btn-back" onClick={onBack} style={{ marginBottom: '2rem', display: 'inline-flex' }}>
+          <ArrowLeft size={16} style={{ marginRight: '8px' }} />
+          Back to Policies
+        </button>
+        <div style={{ marginTop: '2rem' }}>No comparison data available yet.</div>
+      </div>
+    );
+  }
 
   const {
     label,

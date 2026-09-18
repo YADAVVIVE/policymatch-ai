@@ -17,28 +17,35 @@ function App() {
   const [showDashboard, setShowDashboard] = useState(false);
   const [showLanding, setShowLanding] = useState(true);
   const [role, setRole] = useState('Underwriter'); // Added role toggle
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    const abortController = new AbortController();
     const fetchData = async () => {
       try {
         const [policiesRes, customersRes] = await Promise.all([
-          fetch('http://localhost:3001/api/policies'),
-          fetch('http://localhost:3001/api/customers')
+          fetch('http://localhost:3001/api/policies', { signal: abortController.signal }),
+          fetch('http://localhost:3001/api/customers', { signal: abortController.signal })
         ]);
         
+        if (!policiesRes.ok || !customersRes.ok) throw new Error("Failed to load initial data");
+
         const policiesData = await policiesRes.json();
         const customersData = await customersRes.json();
         
-        setPolicies(policiesData);
-        setCustomers(customersData);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
+        setPolicies(Array.isArray(policiesData) ? policiesData : []);
+        setCustomers(Array.isArray(customersData) ? customersData : []);
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+        console.error("Failed to fetch data:", err);
+        setError(err.message || "Failed to connect to the server.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
+    return () => abortController.abort();
   }, []);
 
   const formatCurrency = (amount) => {
@@ -50,8 +57,8 @@ function App() {
   };
 
   const filteredPolicies = activeTab === 'All' 
-    ? policies 
-    : policies.filter(p => p.category === activeTab);
+    ? (policies || []) 
+    : (policies || []).filter(p => p.category === activeTab);
 
   const toggleSelection = (policyId) => {
     const newSelection = new Set(selectedPolicies);
@@ -76,13 +83,15 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           policy_ids: Array.from(selectedPolicies),
-          customer: customers[0] // Using first mock customer
+          customer: customers && customers.length > 0 ? customers[0] : null
         })
       });
+      if (!response.ok) throw new Error("Comparison failed");
       const data = await response.json();
       setCompareData(data);
-    } catch (error) {
-      console.error("Comparison Error:", error);
+    } catch (err) {
+      console.error("Comparison Error:", err);
+      alert("Failed to compare policies. Please try again.");
     } finally {
       setIsComparing(false);
     }
@@ -90,6 +99,16 @@ function App() {
 
   if (loading) {
     return <div className="loading">Loading AI Insights...</div>;
+  }
+
+  if (error) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: '1rem', color: 'var(--text-primary)' }}>
+        <h3>Couldn't load data</h3>
+        <p style={{ color: 'var(--text-secondary)' }}>{error}</p>
+        <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button>
+      </div>
+    );
   }
 
   return (
@@ -214,7 +233,7 @@ function App() {
                         <div className="list-section">
                           <h5>Key Add-ons</h5>
                           <div className="tag-list">
-                            {policy.add_ons.map((addon, idx) => (
+                            {(policy.add_ons || []).map((addon, idx) => (
                               <span key={idx} className="tag">
                                 {addon}
                               </span>

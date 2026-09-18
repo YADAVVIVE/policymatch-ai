@@ -8,28 +8,56 @@ import {
 export default function DashboardView({ onBack }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    const abortController = new AbortController();
     const fetchAnalytics = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/analytics/summary');
+        const response = await fetch('http://localhost:3001/api/analytics/summary', { signal: abortController.signal });
+        if (!response.ok) throw new Error("Failed to load analytics");
         const summary = await response.json();
         setData(summary);
-      } catch (error) {
-        console.error("Failed to fetch analytics:", error);
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+        console.error("Failed to fetch analytics:", err);
+        setError(err.message || "Failed to load dashboard data");
       } finally {
         setLoading(false);
       }
     };
     fetchAnalytics();
+    return () => abortController.abort();
   }, []);
 
   if (loading) {
     return <div className="loading">Loading Analytics Dashboard...</div>;
   }
 
-  if (!data) {
-    return <div className="loading">Error loading dashboard data.</div>;
+  if (error) {
+    return (
+      <div className="dashboard-view animate-fade-in" style={{ textAlign: 'center', padding: '2rem' }}>
+        <button className="btn-back" onClick={onBack} style={{ marginBottom: '2rem', display: 'inline-flex' }}>
+          <ArrowLeft size={16} style={{ marginRight: '8px' }} />
+          Back to Dashboard
+        </button>
+        <h3>Couldn't load data</h3>
+        <p style={{ marginBottom: '1rem' }}>{error}</p>
+        <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button>
+      </div>
+    );
+  }
+
+  if (!data || !data.decision_split) {
+    return (
+      <div className="dashboard-view animate-fade-in" style={{ textAlign: 'center', padding: '2rem' }}>
+        <button className="btn-back" onClick={onBack} style={{ marginBottom: '2rem', display: 'inline-flex' }}>
+          <ArrowLeft size={16} style={{ marginRight: '8px' }} />
+          Back to Dashboard
+        </button>
+        <div style={{ marginTop: '2rem' }}>No data yet</div>
+      </div>
+    );
   }
 
   // Format turnaround time for display

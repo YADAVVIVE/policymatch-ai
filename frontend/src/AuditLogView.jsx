@@ -4,21 +4,27 @@ import { ArrowLeft, Clock, UserCheck, ShieldAlert, CheckCircle, XCircle } from '
 export default function AuditLogView({ onBack }) {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all');
 
   useEffect(() => {
+    const abortController = new AbortController();
     const fetchLogs = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/audit-log');
+        const response = await fetch('http://localhost:3001/api/audit-log', { signal: abortController.signal });
+        if (!response.ok) throw new Error("Failed to load audit logs");
         const data = await response.json();
-        setLogs(data);
-      } catch (error) {
-        console.error("Failed to fetch audit log:", error);
+        setLogs(Array.isArray(data) ? data : []);
+      } catch (err) {
+        if (err.name === 'AbortError') return;
+        console.error("Failed to fetch audit log:", err);
+        setError(err.message || "Failed to load audit trail");
       } finally {
         setLoading(false);
       }
     };
     fetchLogs();
+    return () => abortController.abort();
   }, []);
 
   const filteredLogs = filter === 'all' 
@@ -63,7 +69,13 @@ export default function AuditLogView({ onBack }) {
         </select>
       </div>
 
-      {loading ? (
+      {error ? (
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+          <h3>Couldn't load data</h3>
+          <p style={{ marginBottom: '1rem', color: 'var(--text-secondary)' }}>{error}</p>
+          <button className="btn btn-primary" onClick={() => window.location.reload()}>Retry</button>
+        </div>
+      ) : loading ? (
         <div className="loading">Loading Audit Logs...</div>
       ) : (
         <div className="table-wrapper">
