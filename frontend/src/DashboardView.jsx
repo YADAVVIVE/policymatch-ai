@@ -14,7 +14,7 @@ export default function DashboardView({ onBack }) {
     const abortController = new AbortController();
     const fetchAnalytics = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/analytics/summary', { signal: abortController.signal });
+        const response = await fetch('http://127.0.0.1:3001/api/analytics/summary', { signal: abortController.signal });
         if (!response.ok) throw new Error("Failed to load analytics");
         const summary = await response.json();
         setData(summary);

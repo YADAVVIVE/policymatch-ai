@@ -46,6 +46,7 @@
 
 .table-wrapper {
   overflow-x: auto;
+  overflow-y: auto;
   background: var(--surface);
   border-radius: var(--radius-sm);
   border: 1px solid var(--border);

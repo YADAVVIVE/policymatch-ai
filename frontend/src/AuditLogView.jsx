@@ -11,7 +11,7 @@ export default function AuditLogView({ onBack }) {
     const abortController = new AbortController();
     const fetchLogs = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/audit-log', { signal: abortController.signal });
+        const response = await fetch('http://127.0.0.1:3001/api/audit-log', { signal: abortController.signal });
         if (!response.ok) throw new Error("Failed to load audit logs");
         const data = await response.json();
         setLogs(Array.isArray(data) ? data : []);

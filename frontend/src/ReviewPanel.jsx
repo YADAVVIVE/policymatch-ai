@@ -25,7 +25,7 @@ export default function ReviewPanel({ data, role, onDecisionComplete }) {
 
     setIsSubmitting(true);
     try {
-      const res = await fetch(`http://localhost:3001/api/comparisons/${data.id}/decision`, {
+      const res = await fetch(`http://127.0.0.1:3001/api/comparisons/${data.id}/decision`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
