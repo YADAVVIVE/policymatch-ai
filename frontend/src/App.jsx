@@ -24,8 +24,8 @@ function App() {
     const fetchData = async () => {
       try {
         const [policiesRes, customersRes] = await Promise.all([
-          fetch('http://127.0.0.1:3001/api/policies', { signal: abortController.signal }),
-          fetch('http://127.0.0.1:3001/api/customers', { signal: abortController.signal })
+          fetch('/api/policies', { signal: abortController.signal }),
+          fetch('/api/customers', { signal: abortController.signal })
         ]);
         
         if (!policiesRes.ok || !customersRes.ok) throw new Error("Failed to load initial data");
@@ -78,7 +78,7 @@ function App() {
     if (selectedPolicies.size < 2) return;
     setIsComparing(true);
     try {
-      const response = await fetch('http://127.0.0.1:3001/api/compare', {
+      const response = await fetch('/api/compare', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
